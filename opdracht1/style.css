@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.top {
+  background-color: #00ffb3;
+  padding: 10px 10px;
+  color: white;
+  text-align: center;
+}
+
+.middle {
+  padding: 20px 10px;
+}
+
+.column {
+  display: flex;
+  height: auto;
+}
+
+img {
+  width: 33.31%;
+  padding: 10px 0;
+}
+
+.bottom {
+  background-color: #00ffb3;
+  padding: 10px 10px;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
