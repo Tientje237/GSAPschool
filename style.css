@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 60px 40px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-height: 300px;
+}
+
+/* Calorie Tracker */
+.calorie-bar {
+    width: 80%;
+    height: 30px;
+    background-color: #ddd;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    margin: 20px auto;
+}
+
+.calorie-fill {
+    height: 100%;
+    width: 0; /* Start op 0, wordt geanimeerd in JS */
+    background-color: #4CAF50;
+    border-radius: 15px;
+}
+
+/* Stappenteller Cirkel */
+.step-circle {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 20px auto;
+}
+
+.circle-bg {
+    fill: none;
+    stroke: #ddd;
+    stroke-width: 8;
+}
+
+.circle-progress {
+    fill: none;
+    stroke: #4CAF50;
+    stroke-width: 8;
+    stroke-dasharray: 408; /* Omvang van de cirkel (2 * π * radius) */
+    stroke-dashoffset: 408; /* Start zonder vulling */
+    transition: stroke-dashoffset 1s ease;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.step-counter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: #333;
+}
+
+/* Button */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
