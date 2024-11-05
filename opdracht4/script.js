@@ -1,203 +1,117 @@
-<<<<<<< HEAD
-// Calorie Tracker animatie
-gsap.to("#calorieProgress", {
-  width: "60%", // Pas aan naar jouw data
-  duration: 1.5,
-  ease: "power2.out",
-  scrollTrigger: {
-      trigger: ".calorie-tracker",
-      start: "top 80%", // Begin de animatie als 80% van de sectie in beeld is
-      toggleActions: "play none none reset" // Reset de animatie als deze weer uit beeld gaat
-  }
-});
-
-// Stappenteller animatie
-gsap.to("#stepCount", {
-  innerText: 10000, // Stel het doel aantal stappen in
-  snap: { innerText: 1 }, // Laat de getallen vloeiend oplopen
-  duration: 2,
-  ease: "power1.out",
-  scrollTrigger: {
-      trigger: ".step-counter",
-      start: "top 80%", // Begin als 80% van de sectie in beeld is
-      toggleActions: "play none none reset"
-  },
-  onUpdate: function() {
-      document.getElementById("stepCount").innerText = Math.round(this.targets()[0].innerText);
-  }
-});
-
-// Initieer de grafiek op een canvas-element voor de gewichttracker
-const ctx = document.getElementById("weightChartCanvas").getContext("2d");
-const weightChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        datasets: [{
-            label: "Gewicht",
-            data: [80, 78, 76, 74, 73, 72], // Voorbeelddata
-            borderColor: "#4CAF50",
-            fill: false,
-            borderWidth: 2,
-            tension: 0.4
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
-
-// Gewicht Tracker animatie met GSAP en ScrollTrigger
-ScrollTrigger.create({
-    trigger: ".weight-tracker",
-    start: "top 80%",
-    toggleActions: "play none none reset",
-    onEnter: () => {
-        // Herstart de grafiekanimatie wanneer deze in beeld komt
-        weightChart.update(); // Herladen voor een soepel effect
-        gsap.fromTo(weightChart.data.datasets[0].data, { opacity: 0 }, { opacity: 1, duration: 1 });
-    }
-});
-
-
-// Gezondheidstips animatie
-gsap.from(".health-tip", {
-  opacity: 0,
-  y: 50,
-  duration: 1,
-  ease: "power2.out",
-  scrollTrigger: {
-      trigger: ".health-tips",
-      start: "top 80%", // Begin als 80% van de sectie in beeld is
-      toggleActions: "play none none reset"
-  }
-});
-
-// "Randomize" knop voor gezondheidstips
-document.getElementById("randomizeTip").addEventListener("click", function() {
-  gsap.to(".health-tip", {
-      opacity: 0,
-      y: -20,
-      duration: 0.5,
-      onComplete: function() {
-          // Update de gezondheidstip hier naar een nieuwe tip
-          document.querySelector(".health-tip").innerText = "Nieuwe gezondheidstip hier!";
-          gsap.fromTo(".health-tip", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
-      }
-  });
-});
-
-
-
-// const tips = [
-//   "Drink voldoende water.",
-//   "Zorg voor een goede nachtrust.",
-//   "Blijf fysiek actief.",
-//   "Eet meer groenten en fruit.",
-// ];
-=======
-// GSAP & ScrollTrigger setup
+// Importeer de GSAP en ScrollTrigger modules
 gsap.registerPlugin(ScrollTrigger);
 
-// Calorie Tracker Animation
-document.getElementById("update-calories").addEventListener("click", () => {
-    let calories = document.getElementById("calorie-input").value;
-    let progressWidth = Math.min(calories / 2000 * 100, 100);  // Max 2000 calorieën
-    gsap.to("#calorie-fill", { width: `${progressWidth}%`, duration: 2 });
-});
-
-
-// Stappenteller Animation
-document.getElementById("update-steps").addEventListener("click", () => {
-  let steps = document.getElementById("step-input").value;
-  gsap.to("#step-counter", {
-    textContent: steps,
-    snap: { textContent: 1 },
-    duration: 2,
-  });
-  let progressCircle = Math.min((steps / 10000) * 100, 100); // Voorbeeld: max 10.000 stappen
-  gsap.to("#step-circle::after", { width: `${progressCircle}%`, duration: 2 });
-});
-
-// Gewicht Tracker - Chart.js
-let weightData = [80, 78, 77, 76, 75]; // Voorbeelddata
-let weightChart = new Chart(
-  document.getElementById("weightChart").getContext("2d"),
+// Calorie Tracker animatie
+gsap.fromTo(
+  ".calorie-fill",
+  { width: "0%" },
   {
-    type: "line",
-    data: {
-      labels: ["Januari", "Februari", "Maart", "April", "Mei"],
-      datasets: [
-        {
-          label: "Gewicht (kg)",
-          data: weightData,
-          borderColor: "#76c7c0",
-          borderWidth: 2,
-          fill: false,
-        },
-      ],
+    width: "60%", // Zet op 60% om 1200 van 2000 calorieën te representeren
+    duration: 2,
+    scrollTrigger: {
+      trigger: ".calorie-tracker",
+      start: "top 80%",
+      toggleActions: "play none none reset",
     },
   }
 );
 
-document.getElementById("update-weight").addEventListener("click", () => {
-  let newWeight = document.getElementById("weight-input").value;
-  if (newWeight) {
-    weightData.push(newWeight);
-    weightChart.data.labels.push(`Nieuw (${weightData.length})`); // Voeg een nieuwe maand/label toe
-    weightChart.update();
-    gsap.fromTo("#weightChart", { opacity: 0 }, { opacity: 1, duration: 2 });
-  }
+const stepGoal = 10000;
+const currentSteps = 7000; // Aantal stappen voor dit voorbeeld
+
+// Stappenteller en cirkel animatie
+gsap.to(".circle-progress", {
+  strokeDashoffset: 408 - (408 * currentSteps) / stepGoal, // Bereken voortgang als percentage van de cirkel
+  duration: 6,
+  scrollTrigger: {
+    trigger: ".step-tracker",
+    start: "top 80%",
+    toggleActions: "play none none reset",
+  },
 });
 
-// Gezondheidstips Animation
-const tips = [
-  "Drink voldoende water.",
-  "Zorg voor een goede nachtrust.",
-  "Blijf fysiek actief.",
+// Animeren van het step-counter nummer in de cirkel
+gsap.fromTo(
+  "#stepCounter",
+  { innerText: 0 },
+  {
+    innerText: currentSteps,
+    snap: { innerText: 1 },
+    duration: 6,
+    scrollTrigger: {
+      trigger: ".step-tracker",
+      start: "top 80%",
+      toggleActions: "play none none reset",
+    },
+    onUpdate: function () {
+      // Update de tekst in de teller met afgeronde waarde
+      document.getElementById("stepCounter").textContent = `${Math.round(
+        this.targets()[0].innerText
+      )}`;
+    },
+  }
+);
+
+// Initieer de Chart.js grafiek voor de gewichttracker (zichtbaar bij scrollen)
+const ctx = document.getElementById("weightChartCanvas").getContext("2d");
+let weightChart;
+
+// Weight Tracker animatie met ScrollTrigger
+ScrollTrigger.create({
+  trigger: ".weight-tracker",
+  start: "top 80%",
+  toggleActions: "play none none reset",
+  onEnter: () => {
+    if (!weightChart) {
+      // Controleer of de grafiek al is aangemaakt
+      weightChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+          datasets: [
+            {
+              label: "Gewicht",
+              data: [80, 78, 76, 74, 73, 72],
+              borderColor: "#4CAF50",
+              fill: false,
+              borderWidth: 2,
+              tension: 0.4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
+  },
+});
+
+// Gezondheid Tips sectie met dynamische inhoud
+const healthTips = [
+  "Drink genoeg water!",
+  "Slaap 8 uur per nacht.",
   "Eet meer groenten en fruit.",
+  "Beweeg minstens 30 minuten per dag.",
+  "Vermijd overmatig suikergebruik.",
 ];
 
-function showTip() {
-  const randomTip = tips[Math.floor(Math.random() * tips.length)];
-  const tipElement = document.getElementById("tip");
-  tipElement.textContent = randomTip;
+const healthTipElement = document.getElementById("healthTip");
+const newTipButton = document.getElementById("newTipButton");
 
-  // Animatie bij tip wisselen
-  gsap.fromTo(tipElement, { opacity: 0 }, { opacity: 1, duration: 1 });
-}
-
-document.getElementById("randomizeTip").addEventListener("click", showTip);
-
-// Eerste tip tonen bij laden
-showTip();
-
-// ScrollTrigger voor animaties bij scrollen
-ScrollTrigger.create({
-  trigger: ".calorie-tracker",
-  start: "top center",
-  onEnter: () => gsap.to(".progress-bar::after", { width: "80%", duration: 2 }),
+newTipButton.addEventListener("click", () => {
+  const randomTip = healthTips[Math.floor(Math.random() * healthTips.length)];
+  gsap.to(healthTipElement, {
+    opacity: 0,
+    duration: 0.5,
+    onComplete: () => {
+      healthTipElement.innerText = randomTip;
+      gsap.to(healthTipElement, { opacity: 1, duration: 0.5 });
+    },
+  });
 });
-
-ScrollTrigger.create({
-  trigger: ".stappenteller",
-  start: "top center",
-  onEnter: () =>
-    gsap.to("#step-counter", {
-      textContent: 10000,
-      snap: { textContent: 1 },
-      duration: 2,
-    }),
-});
-
-ScrollTrigger.create({
-  trigger: ".gewicht-tracker",
-  start: "top center",
-  onEnter: () => gsap.from("#weightChart", { opacity: 0, duration: 2, y: 50 }),
-});
->>>>>>> b7f9f04651cd7008068bb667ff1229e19eb477a0
